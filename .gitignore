@@ -1,0 +1,9 @@
+# ignore any ISO files
+*.iso
+
+# ignore any saved files
+*.bak
+
+# ignore raw data
+data/raw_capture_data/*
+
