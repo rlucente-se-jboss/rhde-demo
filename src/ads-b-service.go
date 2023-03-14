@@ -1,3 +1,4 @@
+// TODO THIS ISN'T EVEN HALF GOOD AND IT NEEDS A LOT OF WORK
 package main
 
 import (
