@@ -44,9 +44,11 @@ REST endpoint is accessible at:
 
     http://localhost:8080/ads-b-states
 
-This service is packaged as a lightweight container that has a small
-sample dataset. Volume mounts can be used to replace the data with
-the more expansive dataset.
+This service is packaged as a lightweight container with the full 
+dataset. Volume mounts can be used for an lternative dataset.
+
+After signing in to [quay.io](https://quay.io), you can pull a
+pre-built container [here](https://quay.io/rlucente-se-jboss/ads-b-service).
 
 ### Build the web service
 To build the web service, simply execute the following command:
