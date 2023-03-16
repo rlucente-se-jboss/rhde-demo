@@ -18,7 +18,7 @@ type RawADSBReports struct {
 
 // a very abbreviated ADS-B report
 type AircraftState struct {
-    ICAO24       string  `json:"icao24"`
+	ICAO24       string  `json:"icao24"`
 	CallSign     string  `json:"callsign"`
 	TimePosition int64   `json:"time_position"`
 	Longitude    float64 `json:"longitude"`
@@ -66,7 +66,7 @@ func readRawADSBReports() RawADSBReports {
 	buf, err := ioutil.ReadFile(*fileArg)
 	if err != nil {
 		// use small set of data when no file available
-        buf = []byte("{\"states\":[[\"a7dec2\",\"JIA5316 \",\"United States\",1678803380,1678803380,-77.4538,38.9492,null,true,0.06,182.81,null,null,null,\"7272\",false,0],[\"a2cf43\",\"N280PC  \",\"United States\",1678803634,1678803643,-77.4532,38.9697,null,true,0,267.19,null,null,null,null,false,0],[\"a448d7\",\"UAL1101 \",\"United States\",1678803638,1678803640,-77.4487,38.9464,null,true,1.03,216.56,null,null,null,null,false,0],[\"a2a7c4\",\"00000000\",\"United States\",1678803641,1678803647,-77.4532,38.9695,null,true,0.06,270,null,null,null,\"2012\",true,0]]}")
+		buf = []byte("{\"states\":[[\"a7dec2\",\"JIA5316 \",\"United States\",1678803380,1678803380,-77.4538,38.9492,null,true,0.06,182.81,null,null,null,\"7272\",false,0],[\"a2cf43\",\"N280PC  \",\"United States\",1678803634,1678803643,-77.4532,38.9697,null,true,0,267.19,null,null,null,null,false,0],[\"a448d7\",\"UAL1101 \",\"United States\",1678803638,1678803640,-77.4487,38.9464,null,true,1.03,216.56,null,null,null,null,false,0],[\"a2a7c4\",\"00000000\",\"United States\",1678803641,1678803647,-77.4532,38.9695,null,true,0.06,270,null,null,null,\"2012\",true,0]]}")
 	}
 
 	err = json.Unmarshal(buf, &allRawADSBReports)
@@ -83,7 +83,7 @@ func sortAllAircraftStates(rawReports RawADSBReports) AircraftStates {
 	for _, rawState := range rawReports.States {
 		var state AircraftState
 
-        state.ICAO24 = rawState[0].(string)
+		state.ICAO24 = rawState[0].(string)
 		state.CallSign = rawState[1].(string)
 		state.TimePosition = int64(rawState[3].(float64))
 		state.Longitude = rawState[5].(float64)
@@ -112,7 +112,7 @@ func main() {
 	ticker := time.NewTicker(2 * time.Second)
 	go func() {
 		fmt.Println("Total aircraft states: ", len(timeOrderedStates))
-        aircraftStateMap := make(map[string]AircraftState)
+		aircraftStateMap := make(map[string]AircraftState)
 
 		// this loop repeats every two seconds
 		for _ = range ticker.C {
@@ -123,13 +123,13 @@ func main() {
 					break
 				}
 
-                aircraftStateMap[state.ICAO24] = state
+				aircraftStateMap[state.ICAO24] = state
 			}
 
 			var currentStatesResponse AircraftStatesResponse
-            for _, state := range aircraftStateMap {
-                currentStatesResponse.States = append(currentStatesResponse.States, state)
-            }
+			for _, state := range aircraftStateMap {
+				currentStatesResponse.States = append(currentStatesResponse.States, state)
+			}
 
 			marshalledStatesReport, err := json.Marshal(currentStatesResponse)
 			if err != nil {
