@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+pushd $(dirname $0) &> /dev/null
+
 # This script builds the smallest web service container image
 # possible that also includes the sample dataset.
 
@@ -11,28 +13,26 @@ AUTHOR="Rich Lucente"
 #
 
 CGO_ENABLED=0 GOOS=linux go build -a \
-    -ldflags '-extldflags "-static"' src/$APP_NAME.go
+    -ldflags '-extldflags "-static"' ../src/$APP_NAME.go
 
 #
 # build the container from scratch
 #
 
 newcontainer=$(buildah from scratch)
-
-export $newcontainer
-buildah unshare
 scratchmnt=$(buildah mount $newcontainer)
 
 mkdir -p $scratchmnt/data
 cp $APP_NAME $scratchmnt
-cp data/sample-ads-b-data.json $scratchmnt/data/ads-b-data.json
+cp ../data/sample-ads-b-data.json $scratchmnt/data/ads-b-data.json
 
-buildah config --entrypoint '["/$APP_NAME"]' --port 8080 \
+buildah config --entrypoint "[\"/$APP_NAME\"]" --port 8080 \
     --user 1000 $newcontainer
 buildah config --author "$AUTHOR" --label name="$APP_NAME" $newcontainer
 
-buildah unmount $newcontainer
 buildah commit $newcontainer $APP_NAME
+buildah unmount $newcontainer
 
 buildah rm $newcontainer
 
+popd
