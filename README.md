@@ -57,7 +57,14 @@ To build the web service, simply execute the following command:
 To run the web service with the full data set, use the following
 command:
 
-    podman run --rm -d -p 8080:8080 -v data:/data localhost/ads-b-service:latest
+    podman run --rm -d -p 8080:8080 localhost/ads-b-service:latest
+
+The container includes the full dataset but you can use volume
+mounts to override that to a different dataset. This would look
+like:
+
+    podman run --rm -d -p 8080:8080 \
+        -v data:/data localhost/ads-b-service:latest
 
 ### Test the service
 To test the running service, use the command:
