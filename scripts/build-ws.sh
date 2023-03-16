@@ -35,4 +35,6 @@ buildah unmount $newcontainer
 
 buildah rm $newcontainer
 
+rm $APP_NAME
+
 popd
