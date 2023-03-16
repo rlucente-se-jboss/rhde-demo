@@ -24,7 +24,7 @@ scratchmnt=$(buildah mount $newcontainer)
 
 mkdir -p $scratchmnt/data
 cp $APP_NAME $scratchmnt
-cp ../data/sample-ads-b-data.json $scratchmnt/data/ads-b-data.json
+cp ../data/ads-b-data.json $scratchmnt/data
 
 buildah config --entrypoint "[\"/$APP_NAME\"]" --port 8080 \
     --user 1000 $newcontainer
