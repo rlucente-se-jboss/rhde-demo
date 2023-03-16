@@ -44,7 +44,23 @@ REST endpoint is accessible at:
 
     http://localhost:8080/ads-b-states
 
-This service will be packaged as a lightweight container that has
-a small sample dataset. Volume mounts can be used to replace the
-data with the more expansive dataset.
+This service is packaged as a lightweight container that has a small
+sample dataset. Volume mounts can be used to replace the data with
+the more expansive dataset.
+
+### Build the web service
+To build the web service, simply execute the following command:
+
+    buildah unshare ./scripts/build-ws.sh
+
+### Run the web service
+To run the web service with the full data set, use the following
+command:
+
+    podman run --rm -d -p 8080:8080 -v ./data:/data localhost/ads-b-service:latest
+
+### Test the service
+To test the running service, use the command:
+
+    ./scripts/test-ws.sh
 
