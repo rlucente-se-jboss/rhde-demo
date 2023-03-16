@@ -19,7 +19,7 @@ The sample data covers aircraft events within the following ranges:
 The `time` field is the number of seconds since epoch (Unix time).
 
 The captured data file includes ADS-B position reports collected
-every two seconds for thirty-eight aircraft over a period of fifteen
+every two seconds for thirty-five aircraft over a period of eighteen
 minutes. Each position report has many fields including the callsign,
 time, latitude, longitude, and true track (clockwise decimal degrees
 with north=0&deg;).
@@ -39,8 +39,10 @@ compass points.
 
 ## ADS-B web service
 The simple REST web service takes no parameters and returns a json
-file containing an array of aircraft position reports matching
-current time (within +/- 1 second).
+file containing an array of current aircraft position reports. The
+REST endpoint is accessible at:
+
+    http://localhost:8080/ads-b-states
 
 This service will be packaged as a lightweight container that has
 a small sample dataset. Volume mounts can be used to replace the
