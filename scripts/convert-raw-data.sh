@@ -4,25 +4,34 @@ RAWDATA=$(dirname $0)/../data/raw_capture_data
 OUTDATA=$(dirname $0)/../data/ads-b-data.json
 SAMPLE=$(dirname $0)/../data/sample-ads-b-data.json
 
-# create the file header
+# Create the file header
 echo '{"states":[' > $OUTDATA
 
-# extract all the ads-b position reports from the raw data
-jq .states[] $RAWDATA/*.json | \
-    sed 's/\]/],/g' >> $OUTDATA
+# Extract all the ads-b position reports from the raw data by doing
+# the following:
+#
+#   Extract each aircraft state as a single line
+#   Add a comma to the end of each line
+#   Remove any trailing whitespace in the comma separated fields
+#   Sort all of the lines to get the unique ones
+#   Put the aircraft states in time order
+#   Remove the trailing comma from the last line
 
-# remove the last unnecessary comma from the output
-sed -i.bak '$ s/.$//' $OUTDATA
-rm -f $OUTDATA.bak
+jq -c .states[] $RAWDATA/*.json | \
+    sed 's/\]/],/g' | \
+    sed 's/ *\"/\"/g' | \
+    sort -u | \
+    sort -n -t, -k4 | \
+    sed '$ s/.$//' >> $OUTDATA
 
-# append the correct footer
+# Append the correct footer
 echo "]}" >> $OUTDATA
 
-# compress the file
+# Compress the file
 jq -c . $OUTDATA > tmp.out
 mv tmp.out $OUTDATA
 
-# create the smaller sample dataset
+# Create the smaller sample dataset
 echo '{"states":' > $SAMPLE
 jq .states[0:20] $OUTDATA >> $SAMPLE
 echo "}" >> $SAMPLE
