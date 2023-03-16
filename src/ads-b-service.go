@@ -111,12 +111,19 @@ func main() {
 	// update the aircraft states in the web service response every two seconds
 	ticker := time.NewTicker(2 * time.Second)
 	go func() {
-		fmt.Println("Total aircraft states: ", len(timeOrderedStates))
+		lenStates := len(timeOrderedStates)
+		fmt.Println("Total aircraft states: ", lenStates)
+
 		aircraftStateMap := make(map[string]AircraftState)
 
 		// this loop repeats every two seconds
 		for _ = range ticker.C {
 			rightNow := time.Now().Unix()
+
+			// if past the end, repeat the dataset by adjusting the times
+			if rightNow > timeOrderedStates[lenStates-1].TimePosition {
+				applyTimeCorrection(timeOrderedStates)
+			}
 
 			for _, state := range timeOrderedStates {
 				if state.TimePosition > rightNow {
