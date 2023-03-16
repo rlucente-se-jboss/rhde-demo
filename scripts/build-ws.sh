@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO THIS NEEDS A LOT OF WORK
-
 # This script builds the smallest web service container image
 # possible that also includes the sample dataset.
 
