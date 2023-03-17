@@ -151,7 +151,12 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(currentAircraftStates)
 }
