@@ -55,7 +55,20 @@ To build the web service, simply execute the following command:
 
     buildah unshare ./scripts/build-ws.sh
 
-### Run the web service
+### Run the web service as an executable
+You can build the web service as an executable on any platform with
+golang installed.
+
+    cd ./src
+    go build ads-b-service.go
+
+The run the web service with the desired dataset.
+
+    ./ads-b-service -f ../data/ads-b-data.json
+
+Use CTRL-C to stop the service.
+
+### Run the web service as a container
 To run the web service with the full data set, use the following
 command:
 
