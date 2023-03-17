@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+pushd $(dirname $0) &> /dev/null
+
 USER=__YOUR_OPENSKY_USERNAME__
 PASS=__YOUR_OPENSKY_PASSWORD__
 
@@ -18,7 +20,7 @@ DELAY=2
 
 # place each sample in its own json file
 
-RAWDATA=$WORKDIR/../data/raw_capture_data
+RAWDATA=../data/raw_capture_data
 mkdir -p $RAWDATA
 
 for i in $(seq -f %03g 1 $NUMPTS)
@@ -29,3 +31,4 @@ do
 done
 echo
 
+popd &> /dev/null
