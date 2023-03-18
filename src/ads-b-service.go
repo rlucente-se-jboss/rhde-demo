@@ -77,8 +77,8 @@ func readRawADSBReports() RawADSBReports {
 	return allRawADSBReports
 }
 
-func sortAllAircraftStates(rawReports RawADSBReports) AircraftStates {
-	var sortedAircraftStates AircraftStates
+func convertFromRawReports(rawReports RawADSBReports) AircraftStates {
+	var convertedAircraftStates AircraftStates
 
 	for _, rawState := range rawReports.States {
 		var state AircraftState
@@ -90,12 +90,70 @@ func sortAllAircraftStates(rawReports RawADSBReports) AircraftStates {
 		state.Latitude = rawState[6].(float64)
 		state.TrueTrack = rawState[10].(float64)
 
-		sortedAircraftStates = append(sortedAircraftStates, state)
+		convertedAircraftStates = append(convertedAircraftStates, state)
 	}
 
-	sort.Sort(sortedAircraftStates)
+	return convertedAircraftStates
+}
 
-	return sortedAircraftStates
+func interpolateAircraftStates(aircraftStates AircraftStates) AircraftStates {
+	var interpolatedStates AircraftStates
+
+	statesMap := make(map[string]AircraftStates)
+
+	// map each aircraft to its array of states
+	for _, state := range aircraftStates {
+		statesMap[state.ICAO24] = append(statesMap[state.ICAO24], state)
+	}
+
+	for key := range statesMap {
+		interpolatedStates = append(interpolatedStates, statesMap[key][0])
+
+		if len(statesMap[key]) > 1 {
+			for i := 1; i < len(statesMap[key]); i++ {
+				oldState := statesMap[key][i-1]
+				currentState := statesMap[key][i]
+
+				numSamples := currentState.TimePosition - oldState.TimePosition
+				lonDelta := (currentState.Longitude - oldState.Longitude) / float64(numSamples)
+				latDelta := (currentState.Latitude - oldState.Latitude) / float64(numSamples)
+
+				trkDelta := (currentState.TrueTrack - oldState.TrueTrack)
+				if trkDelta < -180.0 {
+					trkDelta += 360.0
+				}
+				if trkDelta > 180.0 {
+					trkDelta -= 360.0
+				}
+				trkDelta /= float64(numSamples)
+
+				var j int64
+				for j = 1; j <= numSamples; j++ {
+					var newState AircraftState
+
+					newState.ICAO24 = oldState.ICAO24
+					newState.CallSign = oldState.CallSign
+					newState.TimePosition = oldState.TimePosition + j
+					newState.Longitude = oldState.Longitude + float64(j)*lonDelta
+					newState.Latitude = oldState.Latitude + float64(j)*latDelta
+
+					newTrack := oldState.TrueTrack + float64(j)*trkDelta
+					if newTrack < 0 {
+						newTrack += 360
+					}
+					if newTrack > 359 {
+						newTrack -= 360
+					}
+					newState.TrueTrack = newTrack
+
+					interpolatedStates = append(interpolatedStates, newState)
+				}
+			}
+		}
+	}
+
+	sort.Sort(interpolatedStates)
+	return interpolatedStates
 }
 
 // JSON report of all current aircraft states
@@ -105,13 +163,15 @@ func main() {
 	flag.Parse()
 
 	rawADSBReports := readRawADSBReports()
-	timeOrderedStates := sortAllAircraftStates(rawADSBReports)
-	applyTimeCorrection(timeOrderedStates)
+	aircraftStates := convertFromRawReports(rawADSBReports)
+	sort.Sort(aircraftStates)
+	aircraftStates = interpolateAircraftStates(aircraftStates)
+	applyTimeCorrection(aircraftStates)
 
 	// update the aircraft states in the web service response every two seconds
-	ticker := time.NewTicker(2 * time.Second)
+	ticker := time.NewTicker(1 * time.Second)
 	go func() {
-		lenStates := len(timeOrderedStates)
+		lenStates := len(aircraftStates)
 		fmt.Println("Total aircraft states: ", lenStates)
 
 		aircraftStateMap := make(map[string]AircraftState)
@@ -121,11 +181,11 @@ func main() {
 			rightNow := time.Now().Unix()
 
 			// if past the end, repeat the dataset by adjusting the times
-			if rightNow > timeOrderedStates[lenStates-1].TimePosition {
-				applyTimeCorrection(timeOrderedStates)
+			if rightNow > aircraftStates[lenStates-1].TimePosition {
+				applyTimeCorrection(aircraftStates)
 			}
 
-			for _, state := range timeOrderedStates {
+			for _, state := range aircraftStates {
 				if state.TimePosition > rightNow {
 					break
 				}
