@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
+. $(dirname $0)/../demo.conf
+
+[[ $EUID -eq 0 ]] && exit_on_error "Must NOT run as root"
+
+pushd $(dirname $0) &> /dev/null
+
 RAWDATA=$(dirname $0)/../data/raw_capture_data
-OUTDATA=$(dirname $0)/../data/ads-b-data.json
+OUTPUT=$(dirname $0)/../data/ads-b-data.json
 SAMPLE=$(dirname $0)/../data/sample-ads-b-data.json
 
 # Create the file header
-echo '{"states":[' > $OUTDATA
+echo '{"states":[' > $OUTPUT
 
 # Extract all the ads-b position reports from the raw data by doing
 # the following:
@@ -22,19 +28,21 @@ jq -c .states[] $RAWDATA/*.json | \
     sed 's/ *\"/\"/g' | \
     sort -u | \
     sort -n -t, -k4 | \
-    sed '$ s/.$//' >> $OUTDATA
+    sed '$ s/.$//' >> $OUTPUT
 
 # Append the correct footer
-echo "]}" >> $OUTDATA
+echo "]}" >> $OUTPUT
 
 # Compress the file
-jq -c . $OUTDATA > tmp.out
-mv tmp.out $OUTDATA
+jq -c . $OUTPUT > tmp.out
+mv tmp.out $OUTPUT
 
 # Create the smaller sample dataset
 echo '{"states":' > $SAMPLE
-jq .states[0:20] $OUTDATA >> $SAMPLE
+jq .states[0:100] $OUTPUT >> $SAMPLE
 echo "}" >> $SAMPLE
 jq -c . $SAMPLE > tmp.out
 mv tmp.out $SAMPLE
+
+popd &> /dev/null
 
