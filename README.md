@@ -80,9 +80,8 @@ is accessible at:
 This service is packaged as a lightweight container with the full 
 dataset. Volume mounts can be used for an alternative dataset.
 
-TODO MAYBE DON'T NEED TO SIGN IN AS PUBLIC BY DEFAULT
-After signing in to [quay.io](https://quay.io), you can pull a
-pre-built container [here](https://quay.io/rlucente-se-jboss/ads-b-service).
+You can pull a pre-built container
+[here](https://quay.io/rlucente-se-jboss/ads-b-service).
 
 ### Build the ADS-B web service
 Edit the `demo.conf` file to modify the application name, author,
