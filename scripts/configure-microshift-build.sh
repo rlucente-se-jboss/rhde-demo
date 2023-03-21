@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 . $(dirname $0)/../demo.conf
 
 [[ $EUID -ne 0 ]] && exit_on_error "Must run as root"
