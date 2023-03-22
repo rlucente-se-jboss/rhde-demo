@@ -44,7 +44,7 @@ groups = [ "wheel" ]
 user = "$EDGE_USER"
 key = "$(cat id_$EDGE_USER.pub)"
 
-[[customizations.firewall]]
+[customizations.firewall]
 ports = ["6443:tcp"]
 
 [[customizations.firewall.zones]]
