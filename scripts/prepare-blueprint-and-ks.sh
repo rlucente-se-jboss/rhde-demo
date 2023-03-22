@@ -98,8 +98,7 @@ chmod 600 /etc/crio/openshift-pull-secret
 
 # Configure the firewall with the mandatory rules for MicroShift
 firewall-offline-cmd --zone=trusted --add-source=10.42.0.0/16
-firewall-offline-cmd --zone=trusted --add-source=10.43.0.0/16
-firewall-offline-cmd --zone=trusted --add-source=169.254.169.1
+firewall-offline-cmd --zone=trusted --add-source=${EDGE_DEV_IP}
 
 %end
 EOF
