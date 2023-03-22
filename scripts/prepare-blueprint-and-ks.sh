@@ -23,7 +23,7 @@ version = "0.0.1"
 
 [[packages]]
 name = "microshift"
-version = "*"
+version = "4.12.6"
 
 [[containers]]
 source = "quay.io/redhatgov/ads-b-service:latest"
@@ -98,6 +98,7 @@ chmod 600 /etc/crio/openshift-pull-secret
 
 # Configure the firewall with the mandatory rules for MicroShift
 firewall-offline-cmd --zone=trusted --add-source=10.42.0.0/16
+firewall-offline-cmd --zone=trusted --add-source=10.43.0.0/16
 firewall-offline-cmd --zone=trusted --add-source=169.254.169.1
 
 %end
