@@ -25,3 +25,10 @@ systemctl enable --now osbuild-composer.socket cockpit.socket
 
 [[ ! -z "$SUDO_USER" ]] && usermod -aG weldr $SUDO_USER
 
+##
+## Open up port for edge device installations
+##
+
+firewall-cmd --permanent --add-port=${IB_PORT}/tcp
+firewall-cmd --reload
+
