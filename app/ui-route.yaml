@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ads-b-map
+spec:
+  host: ads-b-map.local
+  to:
+    kind: Service
+    name: ads-b-map
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

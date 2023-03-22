@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ads-b-map
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ads-b-map
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ads-b-map
+    spec:
+      containers:
+      - name: ads-b-map
+        image: quay.io/jasonredhat/ads-b-map
+        env:
+        - name: REACT_APP_FLIGHT_API_SERVICE_URL
+          value: http://ads-b-service.rhde-demo.svc.cluster.local:8080/ads-b-states
+        imagePullPolicy: IfNotPresent
+        ports:
+         - containerPort: 8080
+           protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

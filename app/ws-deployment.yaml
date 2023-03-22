@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ads-b-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ads-b-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ads-b-service
+    spec:
+      containers:
+      - name: ads-b-service
+        image: quay.io/redhatgov/ads-b-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+         - containerPort: 8080
+           protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault

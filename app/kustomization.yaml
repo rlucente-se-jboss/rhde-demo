@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: arbitrary
+
+commonLabels:
+  app.kubernetes.io/name: rhde-demo
+
+namespace: rhde-demo
+
+resources:
+  - namespace.yaml
+  - ws-deployment.yaml
+  - ws-service.yaml
+  - ui-deployment.yaml
+  - ui-service.yaml
+  - ui-route.yaml
