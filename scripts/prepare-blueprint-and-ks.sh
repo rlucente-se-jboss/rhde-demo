@@ -92,7 +92,11 @@ $(cat pull-secret.txt)
 EOF1
 
 chmod 600 /etc/crio/openshift-pull-secret
-%end
 
+# Configure the firewall with the mandatory rules for MicroShift
+firewall-offline-cmd --zone=trusted --add-source=10.42.0.0/16
+firewall-offline-cmd --zone=trusted --add-source=169.254.169.1
+
+%end
 EOF
 
