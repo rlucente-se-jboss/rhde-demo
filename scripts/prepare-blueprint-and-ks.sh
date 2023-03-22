@@ -49,7 +49,7 @@ ports = ["6443:tcp"]
 
 [[customizations.firewall.zones]]
 name = "trusted"
-sources = ["10.42.0.0/16", "169.254.169.1"]
+sources = ["10.42.0.0/16", "${EDGE_DEV_IP}"]
 
 EOF
 
