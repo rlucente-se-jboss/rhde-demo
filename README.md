@@ -19,6 +19,11 @@ enable rpm-ostree builds both graphically and from the command line.
 
     sudo ./scripts/install-image-builder.sh
 
+The default blueprint for the rpm-ostree image uses the pre-built
+container images for the applications. If you're not gathering your
+own ADS-B data or rebuilding the applications, you can skip to
+[Setup the build environment](#setup-the-build-environment).
+
 ## Aircraft sample data
 ADS-B data was captured from the [OpenSky Network](https://opensky-network.org/)
 for the Washington, DC metro area including the three major airports,
