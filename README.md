@@ -156,3 +156,50 @@ Run the following script to generate the blueprint and kickstart files.
 The local server is now set up to build an rpm-ostree image that
 enables microshift and serves the rpm-ostree content and kickstart
 to an edge device.
+
+## Build the rpm-ostree image
+Push the blueprint file to the image-builder service using the
+following commands:
+
+    composer-cli blueprints push microshift-blueprint.toml
+    composer-cli blueprints list
+
+Launch an image builder compose using the blueprint file. For this
+example, an edge-commit image will be created so that later the
+rpm-ostree image contents and a kickstart file can be available
+over the network.
+
+    composer-cli compose start-ostree Microshift edge-commit
+
+Wait for the build to complete by monitoring the status of the
+compose.
+
+    watch composer-cli compose status
+
+When the compose has a status of FINISHED, hit CTRL-C to stop the
+status command.
+
+## Create simple web server for edge device installation
+List the composes and select the one you wish to install on the
+edge device. Note the UUID of the compose.
+
+    composer-cli compose list
+
+Download the compose from the image builder by substituting the
+desired UUID in the following command.
+
+    composer-cli compose image <UUID>
+
+Create a temporary directory and populate it with the rpm-ostree
+content and the kickstart file. This directory is where we'll run
+a simple web server for the edge device installation.
+
+    mkdir -p tmp
+    cd tmp
+    tar xvf ../<UUID>-commit.tar
+    ln -s ../microshift.ks .
+
+Launch the simple web server using the following commands.
+
+    . ../demo.conf
+    python3 -m http.server ${IB_PORT}
