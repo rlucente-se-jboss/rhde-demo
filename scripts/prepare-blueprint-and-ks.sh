@@ -44,6 +44,9 @@ groups = [ "wheel" ]
 user = "$EDGE_USER"
 key = "$(cat id_$EDGE_USER.pub)"
 
+[[customizations.firewall]]
+ports = ["6443:tcp"]
+
 [[customizations.firewall.zones]]
 name = "trusted"
 sources = ["10.42.0.0/16", "169.254.169.1"]
@@ -82,7 +85,7 @@ text
 
 ostreesetup --nogpg --url=http://${IB_SERVER}:${IB_PORT}/repo/ --osname=rhel --remote=edge --ref=rhel/8/x86_64/edge
 
-poweroff
+reboot --eject
 
 %post --log=/var/log/anaconda/post-install.log --erroronfail
 
