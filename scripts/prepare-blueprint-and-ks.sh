@@ -28,6 +28,9 @@ version = "4.12.6"
 [[containers]]
 source = "quay.io/redhatgov/ads-b-service:latest"
 
+[[containers]]
+source = "quay.io/jasonredhat/ads-b-map:v0.0.1"
+
 [customizations.services]
 enabled = ["microshift"]
 
@@ -45,11 +48,11 @@ user = "$EDGE_USER"
 key = "$(cat id_$EDGE_USER.pub)"
 
 [customizations.firewall]
-ports = ["6443:tcp"]
+ports = ["6443:tcp", "80:tcp", "443:tcp"]
 
 [[customizations.firewall.zones]]
 name = "trusted"
-sources = ["10.42.0.0/16", "${EDGE_DEV_IP}"]
+sources = ["10.42.0.0/16", "169.254.169.0/24"]
 
 EOF
 
@@ -98,7 +101,7 @@ chmod 600 /etc/crio/openshift-pull-secret
 
 # Configure the firewall with the mandatory rules for MicroShift
 firewall-offline-cmd --zone=trusted --add-source=10.42.0.0/16
-firewall-offline-cmd --zone=trusted --add-source=${EDGE_DEV_IP}
+firewall-offline-cmd --zone=trusted --add-source=169.254.169.0/24
 
 %end
 EOF
