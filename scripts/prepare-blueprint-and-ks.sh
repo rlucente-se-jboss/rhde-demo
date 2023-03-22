@@ -23,7 +23,10 @@ version = "0.0.1"
 
 [[packages]]
 name = "microshift"
-version = "4.12.0-1"
+version = "*"
+
+[[containers]]
+source = "quay.io/redhatgov/ads-b-service:latest"
 
 [customizations.services]
 enabled = ["microshift"]
@@ -71,6 +74,9 @@ part /boot --fstype=xfs --asprimary --size=800
 part pv.01 --grow
 volgroup rhel pv.01
 logvol / --vgname=rhel --fstype=xfs --size=10000 --name=root
+
+rootpw --lock
+user --name=${EDGE_USER} --groups=wheel --password="$(openssl passwd -6 ${EDGE_PASS})" --iscrypted
  
 text
 
@@ -86,5 +92,7 @@ $(cat pull-secret.txt)
 EOF1
 
 chmod 600 /etc/crio/openshift-pull-secret
+%end
+
 EOF
 
