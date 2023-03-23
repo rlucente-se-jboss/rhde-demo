@@ -208,7 +208,7 @@ func main() {
 	}()
 
 	http.HandleFunc("/ads-b-states", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8888", nil))
 }
 
 func enableCors(w *http.ResponseWriter) {
