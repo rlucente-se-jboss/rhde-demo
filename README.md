@@ -80,7 +80,7 @@ The service takes no parameters and returns a JSON file containing
 an array of current aircraft position reports. The REST endpoint
 is accessible at:
 
-    http://localhost:8080/ads-b-states
+    http://localhost:8888/ads-b-states
 
 This service is packaged as a lightweight container with the full 
 dataset. Volume mounts can be used for an alternative dataset.
@@ -105,14 +105,14 @@ size.
 For testing, the web service can be run directly via podman using
 the following command:
 
-    podman run --rm -d -p 8080:8080 localhost/ads-b-service:latest
+    podman run --rm -d -p 8888:8888 localhost/ads-b-service:v0.0.2
 
 The container includes the full dataset but you can use volume
 mounts to override that to a different dataset. This would look
 like:
 
-    podman run --rm -d -p 8080:8080 \
-        -v data:/data localhost/ads-b-service:latest
+    podman run --rm -d -p 8888:8888 \
+        -v data:/data localhost/ads-b-service:v0.0.2
 
 ### Run the web service as an executable
 You can build and test the web service on any platform with golang
