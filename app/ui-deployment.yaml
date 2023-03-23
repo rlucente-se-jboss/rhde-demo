@@ -14,10 +14,7 @@ spec:
     spec:
       containers:
       - name: ads-b-map
-        image: quay.io/jasonredhat/ads-b-map
-        env:
-        - name: REACT_APP_FLIGHT_API_SERVICE_URL
-          value: http://ads-b-service.rhde-demo.svc.cluster.local:8080/ads-b-states
+        image: quay.io/jasonredhat/ads-b-map:v0.0.3
         imagePullPolicy: IfNotPresent
         ports:
          - containerPort: 8080
