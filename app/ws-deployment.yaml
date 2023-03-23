@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
       - name: ads-b-service
-        image: quay.io/redhatgov/ads-b-service:latest
+        image: quay.io/redhatgov/ads-b-service:v0.0.2
         imagePullPolicy: IfNotPresent
         ports:
-         - containerPort: 8080
+         - containerPort: 8888
            protocol: TCP
         securityContext:
           allowPrivilegeEscalation: false
