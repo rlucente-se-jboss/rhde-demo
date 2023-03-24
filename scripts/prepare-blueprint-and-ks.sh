@@ -48,7 +48,7 @@ user = "$EDGE_USER"
 key = "$(cat id_$EDGE_USER.pub)"
 
 [customizations.firewall]
-ports = ["6443:tcp", "80:tcp", "443:tcp"]
+ports = ["6443:tcp", "80:tcp", "443:tcp", "30000:tcp"]
 
 EOF
 
