@@ -50,10 +50,6 @@ key = "$(cat id_$EDGE_USER.pub)"
 [customizations.firewall]
 ports = ["6443:tcp", "80:tcp", "443:tcp"]
 
-[[customizations.firewall.zones]]
-name = "trusted"
-sources = ["10.42.0.0/16", "169.254.169.0/24"]
-
 EOF
 
 ##
