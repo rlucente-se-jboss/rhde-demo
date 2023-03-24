@@ -1,9 +1,9 @@
-# WIP RHDE Demo 
+# RHDE Demo 
 This demo runs two containers on Microshift within a RHEL for Edge
 deployment. One container simulates receiving Automatic Dependent
 Surveillance-Broadcast (ADS-B) reports and making those reports
 available as a simple REST web service. The other container hosts
-a web front end to display the reports on a scrollable map.
+a web front end to display the reports on a graphical map.
 
 ## Install a base system
 Install a minimal RHEL 8.7 system. Next, edit `demo.conf` to include
@@ -108,8 +108,7 @@ the following command:
     podman run --rm -d -p 8888:8888 localhost/ads-b-service:v0.0.2
 
 The container includes the full dataset but you can use volume
-mounts to override that to a different dataset. This would look
-like:
+mounts to override with a different dataset. This would look like:
 
     podman run --rm -d -p 8888:8888 \
         -v data:/data localhost/ads-b-service:v0.0.2
@@ -208,3 +207,78 @@ Launch the simple web server using the following commands.
 
     . ../demo.conf
     python3 -m http.server ${IB_PORT}
+
+## Install the edge device
+Download the RHEL 8.7+ [boot ISO](https://access.redhat.com/downloads/content/479/ver=/rhel---8/8.7/x86_64/product-software).
+Use the ISO to boot either a virtual machine or physical server
+with access to the simple web server above. Append the following
+text to the kernel boot line:
+
+    inst.ks=http://IB_SERVER:IB_PORT/microshift.ks
+
+where both `IB_SERVER` and `IB_PORT` match the values in `demo.conf`.
+
+On the host running the small web server, please note the IP address
+of the edge device as it pulls both the kickstart file and the
+rpm-ostree contents.
+
+The edge device will install automatically and reboot when installation
+is complete. Make sure to remove the install media from the physical
+edge device so it doesn't attempt to install again.
+
+## Get kubeconfig to connect to MicroShift instance
+Copy the file `~/.ssh/id_core` from the image-builder host to your
+local workstation or laptop. This should be in the directory `~/.ssh`
+with permissions 0600.
+
+Login to the edge device and copy the `kubeconfig` file to the local
+user's home directory.
+
+    ssh -i ~/.ssh/id_core core@EDGE_DEVICE_IP
+    sudo cp /var/lib/microshift/resources/kubeadmin/kubeconfig .
+    sudo chown core: kubeconfig
+    exit
+
+Make sure the EDGE_DEVICE_IP matches the IP address of the edge
+device.
+
+Copy the kubeconfig file from the edge device to your local desktop
+or workstation with the following commands:
+
+    mkdir -p ~/.kube
+    scp -i ~/.ssh/id_core EDGE_USER@EDGE_DEVICE_IP:kubeconfig ~/.kube/config
+    chmod og-r ~/.kube/config
+
+The user name `EDGE_USER` should match the value you set earlier
+in the `demo.conf` file.
+
+Edit the file `~/.kube/config` and change the IP address 127.0.0.1
+to the IP address of the edge device.
+
+## Connect to the Microshift cluster
+You can verify that the local `~/.kube/config` is correct by issuing
+the following command.
+
+    oc get all -A
+
+A listing of all the various resources running on the MicroShift
+server should appear.
+
+## Deploy the demo application
+Run the following command to deploy all of the resources for the
+demo application.
+
+    oc apply -k app
+
+## Browse to the demo application
+You'll need to edit your `/etc/hosts` file first on the computer
+where you'll be browsing to the web application. Make sure to add
+the following entries to `/etc/hosts` that map to the actual IP
+address of the edge device.
+
+    192.168.8.60    ads-b-map.local
+    192.168.8.60    ads-b-service.local
+
+Then simply browse to the URL http://ads-b-map.local to see the
+demo.
+
