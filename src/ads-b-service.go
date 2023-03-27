@@ -11,6 +11,11 @@ import (
 	"time"
 )
 
+const (
+    portNumber = "8888"
+	jsonFilePath = "./data/ads-b-data.json"
+)
+
 // raw data format for ADS-B reports
 type RawADSBReports struct {
 	States [][]any `json:"states"`
@@ -45,10 +50,6 @@ func (states AircraftStates) Swap(i, j int) {
 func (states AircraftStates) Len() int {
 	return len(states)
 }
-
-const (
-	jsonFilePath = "./data/ads-b-data.json"
-)
 
 var fileArg = flag.String("f", jsonFilePath, "JSON file containing ADS-B reports")
 
@@ -208,7 +209,7 @@ func main() {
 	}()
 
 	http.HandleFunc("/ads-b-states", handler)
-	log.Fatal(http.ListenAndServe(":8888", nil))
+	log.Fatal(http.ListenAndServe(":" + portNumber, nil))
 }
 
 func enableCors(w *http.ResponseWriter) {
