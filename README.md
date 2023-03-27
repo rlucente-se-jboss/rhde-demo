@@ -226,7 +226,7 @@ The edge device will install automatically and reboot when installation
 is complete. Make sure to remove the install media from the physical
 edge device so it doesn't attempt to install again.
 
-## Get kubeconfig to connect to MicroShift instance
+## Get kubeconfig for MicroShift instance
 Copy the file `~/.ssh/id_core` from the image-builder host to your
 local workstation or laptop. This should be in the directory `~/.ssh`
 with permissions 0600.
@@ -239,8 +239,8 @@ user's home directory.
     sudo chown core: kubeconfig
     exit
 
-Make sure the EDGE_DEVICE_IP matches the IP address of the edge
-device.
+Make sure the parameter EDGE_DEVICE_IP above matches the IP address
+of the edge device.
 
 Copy the kubeconfig file from the edge device to your local desktop
 or workstation with the following commands:
