@@ -26,7 +26,7 @@ name = "microshift"
 version = "4.12.6"
 
 [[containers]]
-source = "quay.io/redhatgov/ads-b-service:v0.0.2"
+source = "quay.io/redhatgov/ads-b-service:v0.0.3"
 
 [[containers]]
 source = "quay.io/jasonredhat/ads-b-map:v0.0.3"
