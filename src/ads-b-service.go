@@ -21,14 +21,21 @@ type RawADSBReports struct {
 	States [][]any `json:"states"`
 }
 
+// for custom marshaller to truncate lat/lon/heading
+type TruncFloat float64
+
+func (tf TruncFloat) MarshalJSON() ([]byte, error) {
+    return []byte(fmt.Sprintf("%9.4f", tf)), nil
+}
+
 // a very abbreviated ADS-B report
 type AircraftState struct {
-	ICAO24       string  `json:"icao24"`
-	CallSign     string  `json:"callsign"`
-	TimePosition int64   `json:"time_position"`
-	Longitude    float64 `json:"longitude"`
-	Latitude     float64 `json:"latitude"`
-	TrueTrack    float64 `json:"true_track"`
+	ICAO24       string     `json:"icao24"`
+	CallSign     string     `json:"callsign"`
+	TimePosition int64      `json:"time_position"`
+	Longitude    TruncFloat `json:"longitude"`
+	Latitude     TruncFloat `json:"latitude"`
+	TrueTrack    TruncFloat `json:"true_track"`
 }
 
 type AircraftStates []AircraftState
@@ -87,9 +94,9 @@ func convertFromRawReports(rawReports RawADSBReports) AircraftStates {
 		state.ICAO24 = rawState[0].(string)
 		state.CallSign = rawState[1].(string)
 		state.TimePosition = int64(rawState[3].(float64))
-		state.Longitude = rawState[5].(float64)
-		state.Latitude = rawState[6].(float64)
-		state.TrueTrack = rawState[10].(float64)
+		state.Longitude = TruncFloat(rawState[5].(float64))
+		state.Latitude = TruncFloat(rawState[6].(float64))
+		state.TrueTrack = TruncFloat(rawState[10].(float64))
 
 		convertedAircraftStates = append(convertedAircraftStates, state)
 	}
@@ -116,8 +123,8 @@ func interpolateAircraftStates(aircraftStates AircraftStates) AircraftStates {
 				currentState := statesMap[key][i]
 
 				numSamples := currentState.TimePosition - oldState.TimePosition
-				lonDelta := (currentState.Longitude - oldState.Longitude) / float64(numSamples)
-				latDelta := (currentState.Latitude - oldState.Latitude) / float64(numSamples)
+				lonDelta := (currentState.Longitude - oldState.Longitude) / TruncFloat(numSamples)
+				latDelta := (currentState.Latitude - oldState.Latitude) / TruncFloat(numSamples)
 
 				trkDelta := (currentState.TrueTrack - oldState.TrueTrack)
 				if trkDelta < -180.0 {
@@ -126,7 +133,7 @@ func interpolateAircraftStates(aircraftStates AircraftStates) AircraftStates {
 				if trkDelta > 180.0 {
 					trkDelta -= 360.0
 				}
-				trkDelta /= float64(numSamples)
+				trkDelta /= TruncFloat(numSamples)
 
 				var j int64
 				for j = 1; j <= numSamples; j++ {
@@ -135,10 +142,10 @@ func interpolateAircraftStates(aircraftStates AircraftStates) AircraftStates {
 					newState.ICAO24 = oldState.ICAO24
 					newState.CallSign = oldState.CallSign
 					newState.TimePosition = oldState.TimePosition + j
-					newState.Longitude = oldState.Longitude + float64(j)*lonDelta
-					newState.Latitude = oldState.Latitude + float64(j)*latDelta
+					newState.Longitude = oldState.Longitude + TruncFloat(j)*lonDelta
+					newState.Latitude = oldState.Latitude + TruncFloat(j)*latDelta
 
-					newTrack := oldState.TrueTrack + float64(j)*trkDelta
+					newTrack := oldState.TrueTrack + TruncFloat(j)*trkDelta
 					if newTrack < 0 {
 						newTrack += 360
 					}
