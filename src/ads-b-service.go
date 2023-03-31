@@ -12,7 +12,7 @@ import (
 )
 
 const (
-    portNumber = "8888"
+	portNumber   = "8888"
 	jsonFilePath = "./data/ads-b-data.json"
 )
 
@@ -25,7 +25,7 @@ type RawADSBReports struct {
 type TruncFloat float64
 
 func (tf TruncFloat) MarshalJSON() ([]byte, error) {
-    return []byte(fmt.Sprintf("%9.4f", tf)), nil
+	return []byte(fmt.Sprintf("%9.4f", tf)), nil
 }
 
 // a very abbreviated ADS-B report
@@ -216,7 +216,7 @@ func main() {
 	}()
 
 	http.HandleFunc("/ads-b-states", handler)
-	log.Fatal(http.ListenAndServe(":" + portNumber, nil))
+	log.Fatal(http.ListenAndServe(":"+portNumber, nil))
 }
 
 func enableCors(w *http.ResponseWriter) {
