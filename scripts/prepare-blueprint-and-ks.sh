@@ -25,11 +25,14 @@ version = "0.0.1"
 name = "microshift"
 version = "4.12.6"
 
-[[containers]]
-source = "quay.io/redhatgov/ads-b-service:v0.0.3"
-
-[[containers]]
-source = "quay.io/jasonredhat/ads-b-map:v0.0.3"
+# This doesn't currently work ... see
+# https://issues.redhat.com/browse/COMPOSER-1898
+#
+# [[containers]]
+# source = "quay.io/redhatgov/ads-b-service:v0.0.3"
+#
+# [[containers]]
+# source = "quay.io/jasonredhat/ads-b-map:v0.1.0"
 
 [customizations.services]
 enabled = ["microshift"]
