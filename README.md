@@ -28,7 +28,7 @@ own ADS-B data or rebuilding the applications, you can skip to
 ADS-B data was captured from the [OpenSky Network](https://opensky-network.org/)
 for the Washington, DC metro area including the three major airports,
 IAD, BWI, and DCA. The `states` array data is described in the
-[OpenSky Network API](https://openskynetwork.github.io/opensky-api/rest.html#id4).
+[OpenSky Network API](https://openskynetwork.github.io/opensky-api/rest.html#response).
 
 The sample data covers aircraft events in the following ranges:
 
@@ -42,7 +42,7 @@ The `time` field is the number of seconds since epoch (Unix time).
 
 The captured data file (`data/ads-b-data.json`) includes ADS-B
 position reports collected every second for 112 aircraft over a
-period of fifteen minutes.  Each position report has many fields
+period of fifteen minutes. Each position report has many fields
 including the callsign, time, latitude, longitude, and true track
 (clockwise decimal degrees with north=0&deg;).
 
