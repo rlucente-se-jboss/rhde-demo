@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"sync"
 	"time"
 )
 
@@ -164,8 +165,9 @@ func interpolateAircraftStates(aircraftStates AircraftStates) AircraftStates {
 	return interpolatedStates
 }
 
-// JSON report of all current aircraft states
+// JSON report of all current aircraft states (make sure access is atomic)
 var currentAircraftStates []byte
+var m sync.Mutex
 
 func main() {
 	flag.Parse()
@@ -211,7 +213,9 @@ func main() {
 				panic(err)
 			}
 
+			m.Lock()
 			currentAircraftStates = marshalledStatesReport
+			m.Unlock()
 		}
 	}()
 
@@ -226,5 +230,7 @@ func enableCors(w *http.ResponseWriter) {
 func handler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
+	m.Lock()
 	w.Write(currentAircraftStates)
+	m.Unlock()
 }
