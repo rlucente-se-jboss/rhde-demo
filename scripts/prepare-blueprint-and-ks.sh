@@ -32,7 +32,7 @@ version = "4.12.6"
 # source = "quay.io/redhatgov/ads-b-service:v0.0.5"
 #
 # [[containers]]
-# source = "quay.io/jasonredhat/ads-b-map:v0.1.4"
+# source = "quay.io/jasonredhat/ads-b-map:v0.1.5"
 
 [customizations.services]
 enabled = ["microshift"]

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: ads-b-map
-        image: quay.io/jasonredhat/ads-b-map:v0.1.4
+        image: quay.io/jasonredhat/ads-b-map:v0.1.5
         imagePullPolicy: IfNotPresent
         ports:
          - containerPort: 8080
