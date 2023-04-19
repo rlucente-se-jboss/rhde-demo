@@ -178,16 +178,19 @@ func main() {
 	aircraftStates = interpolateAircraftStates(aircraftStates)
 	applyTimeCorrection(aircraftStates)
 
-	// update the aircraft states in the web service response every two seconds
+	// update the aircraft states in the web service response every second
 	ticker := time.NewTicker(1 * time.Second)
 	go func() {
 		lenStates := len(aircraftStates)
 		fmt.Println("Total aircraft states: ", lenStates)
 
+		// map of aircraft name to it's current position
 		aircraftStateMap := make(map[string]AircraftState)
 
-		// this loop repeats every two seconds
+		// this loop repeats every second
 		for _ = range ticker.C {
+			// atomically update the consolidated JSON report
+			m.Lock()
 			rightNow := time.Now().Unix()
 
 			// if past the end, repeat the dataset by adjusting the times
@@ -195,6 +198,7 @@ func main() {
 				applyTimeCorrection(aircraftStates)
 			}
 
+			// use a map to have the most recent report for each aircraft by name
 			for _, state := range aircraftStates {
 				if state.TimePosition > rightNow {
 					break
@@ -203,17 +207,18 @@ func main() {
 				aircraftStateMap[state.ICAO24] = state
 			}
 
+			// copy the mapped aircraft states into a consolidated report
 			var currentStatesResponse AircraftStatesResponse
 			for _, state := range aircraftStateMap {
 				currentStatesResponse.States = append(currentStatesResponse.States, state)
 			}
 
+			// marshall the consolidated report to the expected JSON format
 			marshalledStatesReport, err := json.Marshal(currentStatesResponse)
 			if err != nil {
 				panic(err)
 			}
 
-			m.Lock()
 			currentAircraftStates = marshalledStatesReport
 			m.Unlock()
 		}
