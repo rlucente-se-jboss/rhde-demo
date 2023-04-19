@@ -43,7 +43,9 @@ type AircraftStates []AircraftState
 
 // for formatting json responses
 type AircraftStatesResponse struct {
-	States AircraftStates `json:"states"`
+	ReportTime  int64          `json:"report_time"`
+	ElapsedTime int64          `json:"elapsed_time_us"`
+	States      AircraftStates `json:"states"`
 }
 
 // sort functions
@@ -191,7 +193,8 @@ func main() {
 		for _ = range ticker.C {
 			// atomically update the consolidated JSON report
 			m.Lock()
-			rightNow := time.Now().Unix()
+			start := time.Now().UnixNano()
+			rightNow := start / int64(time.Second)
 
 			// if past the end, repeat the dataset by adjusting the times
 			if rightNow > aircraftStates[lenStates-1].TimePosition {
@@ -209,9 +212,13 @@ func main() {
 
 			// copy the mapped aircraft states into a consolidated report
 			var currentStatesResponse AircraftStatesResponse
+			currentStatesResponse.ReportTime = rightNow
+
 			for _, state := range aircraftStateMap {
 				currentStatesResponse.States = append(currentStatesResponse.States, state)
 			}
+
+			currentStatesResponse.ElapsedTime = (time.Now().UnixNano() - start) / int64(time.Microsecond)
 
 			// marshall the consolidated report to the expected JSON format
 			marshalledStatesReport, err := json.Marshal(currentStatesResponse)
