@@ -29,7 +29,7 @@ version = "4.12.6"
 # https://issues.redhat.com/browse/COMPOSER-1898
 #
 # [[containers]]
-# source = "quay.io/redhatgov/ads-b-service:v0.0.4"
+# source = "quay.io/redhatgov/ads-b-service:v0.0.5"
 #
 # [[containers]]
 # source = "quay.io/jasonredhat/ads-b-map:v0.1.4"

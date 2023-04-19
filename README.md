@@ -105,13 +105,13 @@ size.
 For testing, the web service can be run directly via podman using
 the following command:
 
-    podman run --rm -d -p 8888:8888 localhost/ads-b-service:v0.0.4
+    podman run --rm -d -p 8888:8888 localhost/ads-b-service:v0.0.5
 
 The container includes the full dataset but you can use volume
 mounts to override with a different dataset. This would look like:
 
     podman run --rm -d -p 8888:8888 \
-        -v data:/data localhost/ads-b-service:v0.0.4
+        -v data:/data localhost/ads-b-service:v0.0.5
 
 ### Run the web service as an executable
 You can build and test the web service on any platform with golang
