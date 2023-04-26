@@ -18,7 +18,7 @@ cp $HOME/.ssh/id_$EDGE_USER.pub .
 
 cat > microshift-blueprint.toml <<EOF
 name = "Microshift"
-description = "Microshfit edge blueprint"
+description = "Microshift edge blueprint"
 version = "0.0.1"
 
 [[packages]]
