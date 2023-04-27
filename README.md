@@ -4,7 +4,7 @@ This demo runs two containers on Microshift within a RHEL for Edge
 deployment. One container simulates receiving Automatic Dependent
 Surveillance-Broadcast (ADS-B) reports and making those reports
 available as a simple REST web service. The other container hosts
-a web front end to display the reports on a graphical map.
+a web front end to display the reports on a graphical map using the [PatternFly web framework](https://www.patternfly.org/).
 
 ## Install a base system
 Install a minimal RHEL 8.7 system. Next, edit `demo.conf` to include
