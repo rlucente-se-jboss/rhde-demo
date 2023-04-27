@@ -1,7 +1,6 @@
 # RHDE Demo 
 ![Demo Scenario](/images/scenario.png)
-This demo runs two containers on Microshift within a RHEL for Edge
-deployment. One container simulates receiving Automatic Dependent
+This demo runs two containers on [Microshift](https://access.redhat.com/documentation/en-us/red_hat_build_of_microshift/4.12) within a [RHEL for Edge](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/composing_installing_and_managing_rhel_for_edge_images/index) deployment. One container simulates receiving Automatic Dependent
 Surveillance-Broadcast (ADS-B) reports and making those reports
 available as a simple REST web service. The other container hosts
 a web front end to display the reports on a graphical map using the [PatternFly web framework](https://www.patternfly.org/).
