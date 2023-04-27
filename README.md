@@ -1,4 +1,5 @@
 # RHDE Demo 
+![Demo Scenario](/images/scenario.png)
 This demo runs two containers on Microshift within a RHEL for Edge
 deployment. One container simulates receiving Automatic Dependent
 Surveillance-Broadcast (ADS-B) reports and making those reports
