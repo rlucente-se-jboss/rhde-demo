@@ -1,0 +1,10 @@
+check_gpg = true
+check_repogpg = false
+check_ssl = true
+id = "fast-datapath"
+name = "fast-datapath"
+rhsm = false
+system = false
+type = "yum-baseurl"
+url = "https://cdn.redhat.com/content/dist/layered/rhel9/x86_64/fast-datapath /os"
+

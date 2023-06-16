@@ -1,0 +1,10 @@
+check_gpg = true
+check_repogpg = false
+check_ssl = true
+id = "rhocp"
+name = "rhocp"
+rhsm = false
+system = false
+type = "yum-baseurl"
+url = "https://cdn.redhat.com/content/dist/layered/rhel9/x86_64/rhocp/4.13/os"
+
