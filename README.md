@@ -258,7 +258,7 @@ to the IP address of the edge device.
 You can verify that the local `~/.kube/config` is correct by issuing
 the following command.
 
-    oc get all -A
+    oc get all -A --insecure-skip-tls-verify=true
 
 A listing of all the various resources running on the MicroShift
 server should appear.
@@ -267,7 +267,7 @@ server should appear.
 Run the following command to deploy all of the resources for the
 demo application.
 
-    oc apply -k app
+    oc apply -k app --insecure-skip-tls-verify=true
 
 ## Browse to the demo application
 You'll need to edit your `/etc/hosts` file first on the computer
