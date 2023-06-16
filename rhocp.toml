@@ -3,8 +3,7 @@ check_repogpg = false
 check_ssl = true
 id = "rhocp"
 name = "rhocp"
-rhsm = false
+rhsm = true
 system = false
 type = "yum-baseurl"
 url = "https://cdn.redhat.com/content/dist/layered/rhel9/x86_64/rhocp/4.13/os"
-
