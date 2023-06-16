@@ -1,12 +1,12 @@
 # RHDE Demo 
 ![Demo Scenario](/images/scenario.png)
-This demo runs two containers on [Microshift](https://access.redhat.com/documentation/en-us/red_hat_build_of_microshift/4.12) within a [RHEL for Edge](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/composing_installing_and_managing_rhel_for_edge_images/index) deployment. One container simulates receiving Automatic Dependent
+This demo runs two containers on [Microshift](https://access.redhat.com/documentation/en-us/red_hat_build_of_microshift/4.13) within a [RHEL for Edge](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/composing_installing_and_managing_rhel_for_edge_images/index) deployment. One container simulates receiving Automatic Dependent
 Surveillance-Broadcast (ADS-B) reports and making those reports
 available as a simple REST web service. The other container hosts
 a web front end to display the reports on a graphical map using the [PatternFly](https://www.patternfly.org/) web framework.
 
 ## Install a base system
-Install a minimal RHEL 8.7 system. Next, edit `demo.conf` to include
+Install a minimal RHEL 9.2 system. Next, edit `demo.conf` to include
 your [Red Hat Customer Portal](https://access.redhat.com) credentials.
 Then run the following script to register the system and apply all
 updates.
@@ -132,17 +132,11 @@ To test the running service, use the command:
     ./scripts/test-ws.sh
 
 ## Setup the build environment
-The following script adheres to the [Microshift product documentation](https://access.redhat.com/documentation/en-us/red_hat_build_of_microshift/4.12/html-single/installing/index)
+The following script adheres to the [Microshift product documentation](https://access.redhat.com/documentation/en-us/red_hat_build_of_microshift/4.13/html-single/installing/index)
 so please refer to that as you go through the process to enable
 including microshift in rpm-ostree images.
 
     sudo ./scripts/configure-microshift-build.sh
-
-You can confirm that the Microshift source was added correctly using
-the commands:
-
-    composer-cli sources list
-    composer-cli sources info microshift-local
 
 ## Create the edge blueprint file
 You'll need to download your [OpenShift pull secret](https://console.redhat.com/openshift/create/local).
@@ -209,7 +203,7 @@ Launch the simple web server using the following commands.
     python3 -m http.server ${IB_PORT}
 
 ## Install the edge device
-Download the RHEL 8.7+ [boot ISO](https://access.redhat.com/downloads/content/479/ver=/rhel---8/8.7/x86_64/product-software).
+Download the RHEL 9.2 [boot ISO](https://access.cdn.redhat.com/content/origin/files/sha256/08/087f5387f28e6edf1f770ec7eb41e56823b6c3c4d4c3ef09b3b61f59440c229c/rhel-9.2-x86_64-boot.iso?user=1ad149a5a1522a394fd15bf7f0e6b8ab&_auth_=1686956638_aca4da6dc9179ee04ab9ff8b1474a502).
 Use the ISO to boot either a virtual machine or physical server
 with access to the simple web server above. Append the following
 text to the kernel boot line:

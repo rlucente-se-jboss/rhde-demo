@@ -23,16 +23,17 @@ version = "0.0.1"
 
 [[packages]]
 name = "microshift"
-version = "4.12.6"
+version = "*"
 
-# This doesn't currently work ... see
-# https://issues.redhat.com/browse/COMPOSER-1898
-#
-# [[containers]]
-# source = "quay.io/redhatgov/ads-b-service:v0.0.5"
-#
-# [[containers]]
-# source = "quay.io/redhatgov/ads-b-map:v0.1.6"
+[[packages]]
+name = "microshift-greenboot"
+version = "*"
+
+[[containers]]
+source = "quay.io/redhatgov/ads-b-service:v0.0.5"
+
+[[containers]]
+source = "quay.io/redhatgov/ads-b-map:v0.1.6"
 
 [customizations.services]
 enabled = ["microshift"]
@@ -85,7 +86,7 @@ user --name=${EDGE_USER} --groups=wheel --password="$(openssl passwd -6 ${EDGE_P
  
 text
 
-ostreesetup --nogpg --url=http://${IB_SERVER}:${IB_PORT}/repo/ --osname=rhel --remote=edge --ref=rhel/8/x86_64/edge
+ostreesetup --nogpg --url=http://${IB_SERVER}:${IB_PORT}/repo/ --osname=rhel --remote=edge --ref=rhel/9/x86_64/edge
 
 reboot --eject
 
