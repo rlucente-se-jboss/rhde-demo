@@ -138,6 +138,11 @@ including microshift in rpm-ostree images.
 
     sudo ./scripts/configure-microshift-build.sh
 
+Now add the two sources for image-builder to find the MicroShift packages.
+
+    composer-cli sources add fast-datapath.toml
+    composer-cli sources add rhocp.toml
+
 ## Create the edge blueprint file
 You'll need to download your [OpenShift pull secret](https://console.redhat.com/openshift/create/local).
 Make sure the `pull-secret.txt` file is in the same directory as
