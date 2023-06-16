@@ -11,7 +11,7 @@
 dnf -y install osbuild-composer composer-cli cockpit-composer jq \
     bash-completion golang
 
-dnf -y module install container-tools
+dnf -y install container-tools
 
 ##
 ## Start the socket listeners
