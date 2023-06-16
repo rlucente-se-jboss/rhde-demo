@@ -255,8 +255,10 @@ Edit the file `~/.kube/config` and change the IP address 127.0.0.1
 to the IP address of the edge device.
 
 ## Connect to the Microshift cluster
-You can verify that the local `~/.kube/config` is correct by issuing
-the following command.
+Make sure that you have an OpenShift command line client for your
+laptop. On RHEL for example, you can simply install the openshift-clients
+package. You can verify that the local `~/.kube/config` is correct
+by issuing the following command.
 
     oc get all -A --insecure-skip-tls-verify=true
 
